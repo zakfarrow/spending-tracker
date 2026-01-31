@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: spending-tracker-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spending_tracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spending-tracker-app
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mount source code for hot reloading
+      - .:/app
+      # Cache Go modules
+      - go_modules:/go/pkg/mod
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/spending_tracker?sslmode=disable
+      GIN_MODE: debug
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  go_modules:
