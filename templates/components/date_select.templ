@@ -1,0 +1,17 @@
+package components
+
+templ DateSelect() {
+	<div class="flex items-center gap-4">
+		<button class="p-2 hover:bg-gray-100 rounded-lg transition" onClick="handleDateSelectChange()">
+			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+			</svg>
+		</button>
+		<h1 id="expense-period" class="text-xl font-semibold min-w-[200px] text-center">January 2026</h1>
+		<button class="p-2 hover:bg-gray-100 rounded-lg transition">
+			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+			</svg>
+		</button>
+	</div>
+}

@@ -2,25 +2,21 @@ package main
 
 import (
 	"net/http"
-
-	"spending-tracker/template"
-	"spending-tracker/template/component"
+	"spending-tracker/templates"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Period struct {
-	Month uint8  `form:"month" binding:"required,gte=1,lte=12"`
-	Year  uint16 `form:"year" binding:"required"`
-}
-
 func main() {
 	r := gin.Default()
+
+	// Serve static files
+	r.Static("/static", "./static")
 
 	// Root endpoint
 	r.GET("/", func(c *gin.Context) {
 		c.Header("Content-Type", "text/html; charset=utf-8")
-		template.Index().Render(c.Request.Context(), c.Writer)
+		templates.Index().Render(c.Request.Context(), c.Writer)
 	})
 
 	// Healthcheck endpoint
@@ -30,16 +26,14 @@ func main() {
 		})
 	})
 
-	r.POST("/expense", func(c *gin.Context) {
-		c.Header("Content-Type", "text/html; charset=utf-8")
-		var period Period
-		if err := c.ShouldBind(&period); err != nil {
-			c.String(400, "bad request: %v", err)
-			return
-		}
-
-		component.ExpenseDetail(period.Month, period.Year).Render(c.Request.Context(), c.Writer)
-	})
+	// r.POST("/expense", func(c *gin.Context) {
+	// 	c.Header("Content-Type", "text/html; charset=utf-8")
+	// 	var period Period
+	// 	if err := c.ShouldBind(&period); err != nil {
+	// 		c.String(400, "bad request: %v", err)
+	// 		return
+	// 	}
+	// })
 
 	r.Run(":8080")
 }
