@@ -1,8 +1,9 @@
 package templates
 
 import "spending-tracker/templates/components"
+import "spending-tracker/models"
 
-templ Index() {
+templ Index(initial_state models.AppState) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -15,7 +16,7 @@ templ Index() {
 		</head>
 		<body class="bg-gray-50 min-h-screen p-4">
 			<div class="max-w-7xl mx-auto">
-				@components.Header()
+				@components.Header(initial_state.ExpensePeriod)
 				@components.Main()
 			</div>
 		</body>

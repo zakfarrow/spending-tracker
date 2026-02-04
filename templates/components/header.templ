@@ -1,10 +1,12 @@
 package components
 
-templ Header() {
+import "spending-tracker/models"
+
+templ Header(expense_period models.Period) {
 	<div class="bg-white rounded-xl shadow-sm p-6 mb-6">
 		<div class="flex justify-between items-center mb-6">
 			<h1 class="text-2xl font-bold text-gray-900">📊 Budget Tracker</h1>
-			@DateSelect()
+			@DateSelect(expense_period)
 		</div>
 		@SummaryCards()
 	</div>

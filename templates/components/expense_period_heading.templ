@@ -1,0 +1,8 @@
+package components
+
+import "spending-tracker/models"
+import "strconv"
+
+templ ExpensePeriodHeading(period models.Period) {
+	<h1 class="text-xl font-semibold min-w-[200px] text-center">{ period.Month } { strconv.Itoa(int( period.Year )) }</h1>
+}
