@@ -34,3 +34,5 @@ LICENSE
 
 # Logs
 *.log
+
+.claude
