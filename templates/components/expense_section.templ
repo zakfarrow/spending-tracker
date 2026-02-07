@@ -1,157 +1,204 @@
 package components
 
-templ ExpenseSection() {
+import "spending-tracker/models"
+import "fmt"
+import "strconv"
+
+templ ExpenseSection(expenses []models.Expense, categories []models.Category, period models.Period, filter models.ExpenseFilter, summary models.Summary) {
 	<div class="bg-white rounded-xl shadow-sm p-6">
 		<div class="border-b border-gray-200 pb-4 mb-4 flex justify-between items-center">
 			<h2 class="text-lg font-semibold text-gray-900">Expenses</h2>
-			<button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium text-sm">
+			<button
+				onclick="document.getElementById('add-expense-modal').classList.remove('hidden')"
+				class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium text-sm"
+			>
 				+ Add Expense
 			</button>
 		</div>
 		<!-- Filter Tabs -->
-		<div class="flex gap-2 mb-4">
-			<button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium">All</button>
-			<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium">Recurring</button>
-			<button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium">One-time</button>
-		</div>
+		@FilterTabs(period, filter)
 		<!-- Table Header -->
 		<div class="grid grid-cols-12 gap-4 px-4 py-3 bg-gray-50 rounded-lg text-sm font-semibold text-gray-600 mb-2">
-			<div class="col-span-5">Description</div>
-			<div class="col-span-3">Category</div>
+			<div class="col-span-4">Description</div>
+			<div class="col-span-2">Category</div>
+			<div class="col-span-2">Type</div>
 			<div class="col-span-3 text-right">Amount</div>
 			<div class="col-span-1"></div>
 		</div>
 		<!-- Expense Rows -->
-		<div class="space-y-2">
-			<!-- Recurring Expense 1 -->
-			<div class="grid grid-cols-12 gap-4 items-center px-4 py-3 border border-yellow-200 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">
-				<div class="col-span-5 flex items-center gap-2">
-					<input
-						type="text"
-						value="Rent"
-						class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-					<span class="px-2 py-1 bg-yellow-200 text-yellow-800 text-xs font-semibold rounded whitespace-nowrap">Recurring</span>
-				</div>
-				<div class="col-span-3">
-					<span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded">Housing</span>
-				</div>
-				<div class="col-span-3 relative">
-					<span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500">£</span>
-					<input
-						type="number"
-						value="850"
-						class="w-full pl-6 pr-2 py-1 text-right font-medium bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-				</div>
-				<div class="col-span-1 text-center">
-					<button class="text-gray-400 hover:text-red-500 transition text-xl">×</button>
-				</div>
-			</div>
-			<!-- Recurring Expense 2 -->
-			<div class="grid grid-cols-12 gap-4 items-center px-4 py-3 border border-yellow-200 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">
-				<div class="col-span-5 flex items-center gap-2">
-					<input
-						type="text"
-						value="Utilities (Gas, Electric, Water)"
-						class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-					<span class="px-2 py-1 bg-yellow-200 text-yellow-800 text-xs font-semibold rounded whitespace-nowrap">Recurring</span>
-				</div>
-				<div class="col-span-3">
-					<span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">Utilities</span>
-				</div>
-				<div class="col-span-3 relative">
-					<span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500">£</span>
-					<input
-						type="number"
-						value="120"
-						class="w-full pl-6 pr-2 py-1 text-right font-medium bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-				</div>
-				<div class="col-span-1 text-center">
-					<button class="text-gray-400 hover:text-red-500 transition text-xl">×</button>
-				</div>
-			</div>
-			<!-- Recurring Expense 3 -->
-			<div class="grid grid-cols-12 gap-4 items-center px-4 py-3 border border-yellow-200 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">
-				<div class="col-span-5 flex items-center gap-2">
-					<input
-						type="text"
-						value="Phone Contract"
-						class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-					<span class="px-2 py-1 bg-yellow-200 text-yellow-800 text-xs font-semibold rounded whitespace-nowrap">Recurring</span>
-				</div>
-				<div class="col-span-3">
-					<span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">Utilities</span>
-				</div>
-				<div class="col-span-3 relative">
-					<span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500">£</span>
-					<input
-						type="number"
-						value="80"
-						class="w-full pl-6 pr-2 py-1 text-right font-medium bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-				</div>
-				<div class="col-span-1 text-center">
-					<button class="text-gray-400 hover:text-red-500 transition text-xl">×</button>
-				</div>
-			</div>
-			<!-- One-time Expense 1 -->
-			<div class="grid grid-cols-12 gap-4 items-center px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-				<div class="col-span-5">
-					<input
-						type="text"
-						value="New Laptop"
-						class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-				</div>
-				<div class="col-span-3">
-					<span class="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">Other</span>
-				</div>
-				<div class="col-span-3 relative">
-					<span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500">£</span>
-					<input
-						type="number"
-						value="250"
-						class="w-full pl-6 pr-2 py-1 text-right font-medium bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-				</div>
-				<div class="col-span-1 text-center">
-					<button class="text-gray-400 hover:text-red-500 transition text-xl">×</button>
-				</div>
-			</div>
-			<!-- One-time Expense 2 -->
-			<div class="grid grid-cols-12 gap-4 items-center px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-				<div class="col-span-5">
-					<input
-						type="text"
-						value="Birthday Dinner"
-						class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-				</div>
-				<div class="col-span-3">
-					<span class="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">Food</span>
-				</div>
-				<div class="col-span-3 relative">
-					<span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500">£</span>
-					<input
-						type="number"
-						value="75"
-						class="w-full pl-6 pr-2 py-1 text-right font-medium bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
-					/>
-				</div>
-				<div class="col-span-1 text-center">
-					<button class="text-gray-400 hover:text-red-500 transition text-xl">×</button>
-				</div>
-			</div>
+		<div id="expense-list" class="space-y-2">
+			@ExpenseList(expenses, categories, period, filter)
 		</div>
 		<!-- Total Row -->
+		<div id="expense-total" class="grid grid-cols-12 gap-4 px-4 py-4 mt-4 border-t-2 border-gray-200 font-bold text-lg">
+			<div class="col-span-4">Total Expenses</div>
+			<div class="col-span-4"></div>
+			<div class="col-span-3 text-right">{ fmt.Sprintf("£%.2f", summary.TotalExpenses) }</div>
+			<div class="col-span-1"></div>
+		</div>
+	</div>
+}
+
+templ FilterTabs(period models.Period, activeFilter models.ExpenseFilter) {
+	<div class="flex gap-2 mb-4">
+		<button
+			hx-get={ fmt.Sprintf("/expenses?year=%d&month=%d&filter=all", period.Year, period.Month) }
+			hx-target="#expense-list"
+			hx-swap="innerHTML"
+			class={ filterButtonClass(activeFilter == models.FilterAll) }
+		>
+			All
+		</button>
+		<button
+			hx-get={ fmt.Sprintf("/expenses?year=%d&month=%d&filter=recurring", period.Year, period.Month) }
+			hx-target="#expense-list"
+			hx-swap="innerHTML"
+			class={ filterButtonClass(activeFilter == models.FilterRecurring) }
+		>
+			Recurring
+		</button>
+		<button
+			hx-get={ fmt.Sprintf("/expenses?year=%d&month=%d&filter=one_time", period.Year, period.Month) }
+			hx-target="#expense-list"
+			hx-swap="innerHTML"
+			class={ filterButtonClass(activeFilter == models.FilterOneTime) }
+		>
+			One-time
+		</button>
+	</div>
+}
+
+func filterButtonClass(active bool) string {
+	if active {
+		return "px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium"
+	}
+	return "px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
+}
+
+templ ExpenseList(expenses []models.Expense, categories []models.Category, period models.Period, filter models.ExpenseFilter) {
+	if len(expenses) == 0 {
+		<div class="text-center py-8 text-gray-500">
+			No expenses yet. Click "+ Add Expense" to get started.
+		</div>
+	}
+	for _, expense := range expenses {
+		@ExpenseRow(expense, categories, period)
+	}
+}
+
+templ ExpenseRow(expense models.Expense, categories []models.Category, period models.Period) {
+	<div
+		id={ fmt.Sprintf("expense-%d", expense.ID) }
+		class={ expenseRowClass(expense.IsRecurring()) }
+	>
+		<form
+			hx-put={ fmt.Sprintf("/expenses/%d", expense.ID) }
+			hx-trigger="change"
+			hx-target={ fmt.Sprintf("#expense-%d", expense.ID) }
+			hx-swap="outerHTML"
+			class="contents"
+		>
+			<input type="hidden" name="year" value={ strconv.Itoa(period.Year) }/>
+			<input type="hidden" name="month" value={ strconv.Itoa(period.Month) }/>
+			<input type="hidden" name="expense_type" value={ string(expense.Type) }/>
+			<div class="col-span-4 flex items-center gap-2">
+				<input
+					type="text"
+					name="description"
+					value={ expense.Description }
+					class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
+				/>
+				if expense.IsRecurring() {
+					<span class="px-2 py-1 bg-yellow-200 text-yellow-800 text-xs font-semibold rounded whitespace-nowrap">Recurring</span>
+				}
+			</div>
+			<div class="col-span-2">
+				<select
+					name="category_id"
+					class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition text-sm"
+				>
+					<option value="">None</option>
+					for _, cat := range categories {
+						<option
+							value={ strconv.FormatInt(cat.ID, 10) }
+							selected?={ expense.CategoryID != nil && *expense.CategoryID == cat.ID }
+						>
+							{ cat.Name }
+						</option>
+					}
+				</select>
+			</div>
+			<div class="col-span-2">
+				<select
+					name="expense_type"
+					class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition text-sm"
+				>
+					<option value="one_time" selected?={ expense.Type == models.ExpenseTypeOneTime }>One-time</option>
+					<option value="recurring" selected?={ expense.Type == models.ExpenseTypeRecurring }>Recurring</option>
+				</select>
+			</div>
+			<div class="col-span-3 relative">
+				<span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500">£</span>
+				<input
+					type="number"
+					name="amount"
+					step="0.01"
+					value={ fmt.Sprintf("%.2f", expense.Amount) }
+					class="w-full pl-6 pr-2 py-1 text-right font-medium bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition"
+				/>
+			</div>
+		</form>
+		<div class="col-span-1 text-center">
+			<button
+				hx-delete={ fmt.Sprintf("/expenses/%d?year=%d&month=%d", expense.ID, period.Year, period.Month) }
+				hx-target={ fmt.Sprintf("#expense-%d", expense.ID) }
+				hx-swap="delete"
+				hx-confirm="Delete this expense?"
+				class="text-gray-400 hover:text-red-500 transition text-xl"
+			>
+				×
+			</button>
+		</div>
+	</div>
+}
+
+func expenseRowClass(isRecurring bool) string {
+	if isRecurring {
+		return "grid grid-cols-12 gap-4 items-center px-4 py-3 border border-yellow-200 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition"
+	}
+	return "grid grid-cols-12 gap-4 items-center px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+}
+
+templ ExpenseRowWithOOB(expense models.Expense, categories []models.Category, summary models.Summary, income float64, period models.Period) {
+	@ExpenseRow(expense, categories, period)
+	<div id="summary-cards" hx-swap-oob="true">
+		@SummaryCards(summary)
+	</div>
+	<div id="summary-stats-content" hx-swap-oob="true">
+		@SummaryStatsContent(summary)
+	</div>
+	<div id="expense-total" hx-swap-oob="true">
 		<div class="grid grid-cols-12 gap-4 px-4 py-4 mt-4 border-t-2 border-gray-200 font-bold text-lg">
-			<div class="col-span-5">Total Expenses</div>
-			<div class="col-span-3"></div>
-			<div class="col-span-3 text-right">£1,375</div>
+			<div class="col-span-4">Total Expenses</div>
+			<div class="col-span-4"></div>
+			<div class="col-span-3 text-right">{ fmt.Sprintf("£%.2f", summary.TotalExpenses) }</div>
+			<div class="col-span-1"></div>
+		</div>
+	</div>
+}
+
+templ SummaryOOB(summary models.Summary, income float64, period models.Period) {
+	<div id="summary-cards" hx-swap-oob="true">
+		@SummaryCards(summary)
+	</div>
+	<div id="summary-stats-content" hx-swap-oob="true">
+		@SummaryStatsContent(summary)
+	</div>
+	<div id="expense-total" hx-swap-oob="true">
+		<div class="grid grid-cols-12 gap-4 px-4 py-4 mt-4 border-t-2 border-gray-200 font-bold text-lg">
+			<div class="col-span-4">Total Expenses</div>
+			<div class="col-span-4"></div>
+			<div class="col-span-3 text-right">{ fmt.Sprintf("£%.2f", summary.TotalExpenses) }</div>
 			<div class="col-span-1"></div>
 		</div>
 	</div>

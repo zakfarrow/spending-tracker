@@ -1,13 +1,20 @@
 package components
 
-templ Main() {
+import "spending-tracker/models"
+
+templ Main(state models.AppState) {
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 		<div class="lg:col-span-2 space-y-6">
-			@IncomeSection()
-			@ExpenseSection()
+			@IncomeSection(state.Income, state.Period)
+			@ExpenseSection(state.Expenses, state.Categories, state.Period, state.Filter, state.Summary)
 		</div>
 		<div class="space-y-6">
-			@SummaryStats()
+			@SummaryStats(state.Summary)
 		</div>
 	</div>
+}
+
+templ FullPageContent(state models.AppState) {
+	@Header(state)
+	@Main(state)
 }

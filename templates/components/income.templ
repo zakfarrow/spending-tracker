@@ -1,20 +1,44 @@
 package components
 
-templ IncomeSection() {
-	<div class="bg-white rounded-xl shadow-sm p-6">
+import "spending-tracker/models"
+import "fmt"
+import "strconv"
+
+templ IncomeSection(income float64, period models.Period) {
+	<div id="income-section" class="bg-white rounded-xl shadow-sm p-6">
 		<div class="border-b border-gray-200 pb-4 mb-4">
 			<h2 class="text-lg font-semibold text-gray-900">Income</h2>
 		</div>
-		<div class="flex items-center gap-4">
+		<form
+			hx-put="/income"
+			hx-trigger="change"
+			hx-target="#income-section"
+			hx-swap="outerHTML"
+			class="flex items-center gap-4"
+		>
+			<input type="hidden" name="year" value={ strconv.Itoa(period.Year) }/>
+			<input type="hidden" name="month" value={ strconv.Itoa(period.Month) }/>
 			<label class="font-medium text-gray-700">Monthly Salary</label>
 			<div class="relative flex-1">
 				<span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">£</span>
 				<input
 					type="number"
-					value="3500"
+					name="amount"
+					step="0.01"
+					value={ fmt.Sprintf("%.2f", income) }
 					class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg font-semibold"
 				/>
 			</div>
-		</div>
+		</form>
+	</div>
+}
+
+templ IncomeWithOOB(state models.AppState) {
+	@IncomeSection(state.Income, state.Period)
+	<div id="summary-cards" hx-swap-oob="true">
+		@SummaryCards(state.Summary)
+	</div>
+	<div id="summary-stats-content" hx-swap-oob="true">
+		@SummaryStatsContent(state.Summary)
 	</div>
 }

@@ -3,7 +3,7 @@ package templates
 import "spending-tracker/templates/components"
 import "spending-tracker/models"
 
-templ Index(initial_state models.AppState) {
+templ Index(state models.AppState) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -15,10 +15,11 @@ templ Index(initial_state models.AppState) {
 			<script src="/static/index.js"></script>
 		</head>
 		<body class="bg-gray-50 min-h-screen p-4">
-			<div class="max-w-7xl mx-auto">
-				@components.Header(initial_state.ExpensePeriod)
-				@components.Main()
+			<div id="page-content" class="max-w-7xl mx-auto">
+				@components.FullPageContent(state)
 			</div>
+			@components.AddExpenseModal(state.Categories, state.Period)
+			@components.CategoryModal(state.Categories)
 		</body>
 	</html>
 }

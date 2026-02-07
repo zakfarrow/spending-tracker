@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "spending-tracker/models"
 
-func Header(expense_period models.Period) templ.Component {
+func Header(state models.AppState) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,11 +31,11 @@ func Header(expense_period models.Period) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-white rounded-xl shadow-sm p-6 mb-6\"><div class=\"flex justify-between items-center mb-6\"><h1 class=\"text-2xl font-bold text-gray-900\">📊 Budget Tracker</h1>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-white rounded-xl shadow-sm p-6 mb-6\"><div class=\"flex justify-between items-center mb-6\"><div class=\"flex items-center gap-4\"><h1 class=\"text-2xl font-bold text-gray-900\">Budget Tracker</h1><button onclick=\"document.getElementById('category-modal').classList.remove('hidden')\" class=\"text-sm text-gray-500 hover:text-gray-700 underline\">Manage Categories</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = DateSelect(expense_period).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = DateSelect(state.Period).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -43,7 +43,7 @@ func Header(expense_period models.Period) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = SummaryCards().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = SummaryCards(state.Summary).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

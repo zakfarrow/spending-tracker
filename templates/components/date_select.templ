@@ -1,19 +1,31 @@
 package components
 
 import "spending-tracker/models"
-import "strconv"
+import "fmt"
 
-templ DateSelect(expense_period models.Period) {
+templ DateSelect(period models.Period) {
 	<div class="flex items-center gap-4">
-		<button class="p-2 hover:bg-gray-100 rounded-lg transition" hx-get="/current-expense-period" hx-target="#current-expense-period">
+		<button
+			class="p-2 hover:bg-gray-100 rounded-lg transition"
+			hx-get={ fmt.Sprintf("/period/%d/%d", period.Prev().Year, period.Prev().Month) }
+			hx-target="#page-content"
+			hx-swap="innerHTML"
+			hx-push-url={ fmt.Sprintf("/?year=%d&month=%d", period.Prev().Year, period.Prev().Month) }
+		>
 			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
 			</svg>
 		</button>
 		<div id="current-expense-period">
-			<h1 class="text-xl font-semibold min-w-[200px] text-center">{ expense_period.Month } { strconv.Itoa(int( expense_period.Year )) }</h1>
+			<h1 class="text-xl font-semibold min-w-[200px] text-center">{ period.MonthName() } { fmt.Sprintf("%d", period.Year) }</h1>
 		</div>
-		<button class="p-2 hover:bg-gray-100 rounded-lg transition">
+		<button
+			class="p-2 hover:bg-gray-100 rounded-lg transition"
+			hx-get={ fmt.Sprintf("/period/%d/%d", period.Next().Year, period.Next().Month) }
+			hx-target="#page-content"
+			hx-swap="innerHTML"
+			hx-push-url={ fmt.Sprintf("/?year=%d&month=%d", period.Next().Year, period.Next().Month) }
+		>
 			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
 			</svg>
