@@ -6,14 +6,14 @@ import "strconv"
 templ AddExpenseModal(categories []models.Category, period models.Period) {
 	<div
 		id="add-expense-modal"
-		class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-		onclick="if(event.target === this) this.classList.add('hidden')"
+		class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+		onclick="if(event.target === this) this.remove()"
 	>
 		<div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4">
 			<div class="flex justify-between items-center mb-6">
 				<h2 class="text-xl font-semibold text-gray-900">Add Expense</h2>
 				<button
-					onclick="document.getElementById('add-expense-modal').classList.add('hidden')"
+					onclick="document.getElementById('add-expense-modal').remove()"
 					class="text-gray-400 hover:text-gray-600 text-2xl"
 				>
 					×
@@ -23,7 +23,7 @@ templ AddExpenseModal(categories []models.Category, period models.Period) {
 				hx-post="/expenses"
 				hx-target="#expense-list"
 				hx-swap="beforeend"
-				hx-on::after-request="document.getElementById('add-expense-modal').classList.add('hidden'); this.reset()"
+				hx-on::after-request="document.getElementById('add-expense-modal').remove()"
 			>
 				<input type="hidden" name="year" value={ strconv.Itoa(period.Year) }/>
 				<input type="hidden" name="month" value={ strconv.Itoa(period.Month) }/>
@@ -93,7 +93,7 @@ templ AddExpenseModal(categories []models.Category, period models.Period) {
 				<div class="mt-6 flex gap-3">
 					<button
 						type="button"
-						onclick="document.getElementById('add-expense-modal').classList.add('hidden')"
+						onclick="document.getElementById('add-expense-modal').remove()"
 						class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
 					>
 						Cancel

@@ -9,7 +9,9 @@ templ ExpenseSection(expenses []models.Expense, categories []models.Category, pe
 		<div class="border-b border-gray-200 pb-4 mb-4 flex justify-between items-center">
 			<h2 class="text-lg font-semibold text-gray-900">Expenses</h2>
 			<button
-				onclick="document.getElementById('add-expense-modal').classList.remove('hidden')"
+				hx-get={ fmt.Sprintf("/modals/expense?year=%d&month=%d", period.Year, period.Month) }
+				hx-target="body"
+				hx-swap="beforeend"
 				class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-medium text-sm"
 			>
 				+ Add Expense
@@ -116,16 +118,12 @@ templ ExpenseRow(expense models.Expense, categories []models.Category, period mo
 				<select
 					name="category_id"
 					class="w-full px-2 py-1 bg-transparent border border-transparent hover:bg-white hover:border-gray-300 rounded focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition text-sm"
+					hx-get={ fmt.Sprintf("/categories/options?selected=%s", categoryIDParam(expense.CategoryID)) }
+					hx-trigger="focus"
+					hx-target="this"
+					hx-swap="innerHTML"
 				>
-					<option value="">None</option>
-					for _, cat := range categories {
-						<option
-							value={ strconv.FormatInt(cat.ID, 10) }
-							selected?={ expense.CategoryID != nil && *expense.CategoryID == cat.ID }
-						>
-							{ cat.Name }
-						</option>
-					}
+					<option value={ categoryIDParam(expense.CategoryID) }>{ getCategoryName(expense.CategoryID, categories) }</option>
 				</select>
 			</div>
 			<div class="col-span-2">
@@ -202,4 +200,23 @@ templ SummaryOOB(summary models.Summary, income float64, period models.Period) {
 			<div class="col-span-1"></div>
 		</div>
 	</div>
+}
+
+func categoryIDParam(categoryID *int64) string {
+	if categoryID == nil {
+		return ""
+	}
+	return strconv.FormatInt(*categoryID, 10)
+}
+
+func getCategoryName(categoryID *int64, categories []models.Category) string {
+	if categoryID == nil {
+		return "None"
+	}
+	for _, cat := range categories {
+		if cat.ID == *categoryID {
+			return cat.Name
+		}
+	}
+	return "None"
 }

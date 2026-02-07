@@ -10,14 +10,14 @@ var availableColors = []string{"blue", "purple", "green", "orange", "pink", "red
 templ CategoryModal(categories []models.Category) {
 	<div
 		id="category-modal"
-		class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-		onclick="if(event.target === this) this.classList.add('hidden')"
+		class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+		onclick="if(event.target === this) this.remove()"
 	>
 		<div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md mx-4">
 			<div class="flex justify-between items-center mb-6">
 				<h2 class="text-xl font-semibold text-gray-900">Manage Categories</h2>
 				<button
-					onclick="document.getElementById('category-modal').classList.add('hidden')"
+					onclick="document.getElementById('category-modal').remove()"
 					class="text-gray-400 hover:text-gray-600 text-2xl"
 				>
 					×
@@ -89,4 +89,16 @@ templ CategoryItem(cat models.Category) {
 			×
 		</button>
 	</div>
+}
+
+templ CategoryOptions(categories []models.Category, selectedID *int64) {
+	<option value="">None</option>
+	for _, cat := range categories {
+		<option
+			value={ strconv.FormatInt(cat.ID, 10) }
+			selected?={ selectedID != nil && *selectedID == cat.ID }
+		>
+			{ cat.Name }
+		</option>
+	}
 }

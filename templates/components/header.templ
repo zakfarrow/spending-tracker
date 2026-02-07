@@ -8,7 +8,9 @@ templ Header(state models.AppState) {
 			<div class="flex items-center gap-4">
 				<h1 class="text-2xl font-bold text-gray-900">Budget Tracker</h1>
 				<button
-					onclick="document.getElementById('category-modal').classList.remove('hidden')"
+					hx-get="/modals/category"
+					hx-target="body"
+					hx-swap="beforeend"
 					class="text-sm text-gray-500 hover:text-gray-700 underline"
 				>
 					Manage Categories

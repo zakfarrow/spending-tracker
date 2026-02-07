@@ -31,7 +31,7 @@ func Header(state models.AppState) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-white rounded-xl shadow-sm p-6 mb-6\"><div class=\"flex justify-between items-center mb-6\"><div class=\"flex items-center gap-4\"><h1 class=\"text-2xl font-bold text-gray-900\">Budget Tracker</h1><button onclick=\"document.getElementById('category-modal').classList.remove('hidden')\" class=\"text-sm text-gray-500 hover:text-gray-700 underline\">Manage Categories</button></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"bg-white rounded-xl shadow-sm p-6 mb-6\"><div class=\"flex justify-between items-center mb-6\"><div class=\"flex items-center gap-4\"><h1 class=\"text-2xl font-bold text-gray-900\">Budget Tracker</h1><button hx-get=\"/modals/category\" hx-target=\"body\" hx-swap=\"beforeend\" class=\"text-sm text-gray-500 hover:text-gray-700 underline\">Manage Categories</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

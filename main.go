@@ -40,9 +40,13 @@ func main() {
 	r.DELETE("/expenses/:id", handleDeleteExpense)
 
 	r.GET("/categories", handleGetCategories)
+	r.GET("/categories/options", handleGetCategoryOptions)
 	r.POST("/categories", handleCreateCategory)
 	r.PUT("/categories/:id", handleUpdateCategory)
 	r.DELETE("/categories/:id", handleDeleteCategory)
+
+	r.GET("/modals/expense", handleExpenseModal)
+	r.GET("/modals/category", handleCategoryModal)
 
 	r.Run(":8080")
 }
@@ -272,6 +276,24 @@ func handleGetCategories(c *gin.Context) {
 	components.CategoryList(categories).Render(c.Request.Context(), c.Writer)
 }
 
+func handleGetCategoryOptions(c *gin.Context) {
+	selected, _ := strconv.ParseInt(c.Query("selected"), 10, 64)
+
+	categories, err := db.GetAllCategories(c.Request.Context())
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Error loading categories: %v", err)
+		return
+	}
+
+	var selectedPtr *int64
+	if selected > 0 {
+		selectedPtr = &selected
+	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	components.CategoryOptions(categories, selectedPtr).Render(c.Request.Context(), c.Writer)
+}
+
 func handleCreateCategory(c *gin.Context) {
 	name := c.PostForm("name")
 	color := c.PostForm("color")
@@ -328,4 +350,30 @@ func handleDeleteCategory(c *gin.Context) {
 
 	c.Header("Content-Type", "text/html; charset=utf-8")
 	components.CategoryList(categories).Render(c.Request.Context(), c.Writer)
+}
+
+func handleExpenseModal(c *gin.Context) {
+	year, _ := strconv.Atoi(c.Query("year"))
+	month, _ := strconv.Atoi(c.Query("month"))
+
+	period := models.Period{Year: year, Month: month}
+	categories, err := db.GetAllCategories(c.Request.Context())
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Error loading categories: %v", err)
+		return
+	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	components.AddExpenseModal(categories, period).Render(c.Request.Context(), c.Writer)
+}
+
+func handleCategoryModal(c *gin.Context) {
+	categories, err := db.GetAllCategories(c.Request.Context())
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Error loading categories: %v", err)
+		return
+	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	components.CategoryModal(categories).Render(c.Request.Context(), c.Writer)
 }
