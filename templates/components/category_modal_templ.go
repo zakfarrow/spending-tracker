@@ -397,7 +397,7 @@ func CategoryNameEdit(cat models.Category) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\" hx-trigger=\"blur, keydown[key=='Enter']\" hx-on::after-swap=\"htmx.trigger('[data-year]', 'categoryUpdated')\" class=\"flex-1 px-2 py-1 text-sm border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500\" onkeydown=\"if(event.key==='Escape'){event.preventDefault();htmx.ajax('GET','/categories','#category-list')}\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\" hx-trigger=\"blur, keydown[key=='Enter']\" hx-on::after-swap=\"document.querySelector('[data-year]')?.dispatchEvent(new Event('categoryUpdated', {bubbles: true}))\" class=\"flex-1 px-2 py-1 text-sm border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500\" onkeydown=\"if(event.key==='Escape'){event.preventDefault();htmx.ajax('GET','/categories','#category-list')}\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -466,7 +466,7 @@ func CategoryColorEdit(cat models.Category) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\" hx-swap=\"outerHTML\" hx-on::after-swap=\"htmx.trigger('[data-year]', 'categoryUpdated')\" class=\"flex items-center gap-2 flex-1\"><input type=\"hidden\" name=\"name\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\" hx-swap=\"outerHTML\" hx-on::after-swap=\"document.querySelector('[data-year]')?.dispatchEvent(new Event('categoryUpdated', {bubbles: true}))\" class=\"flex items-center gap-2 flex-1\"><input type=\"hidden\" name=\"name\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

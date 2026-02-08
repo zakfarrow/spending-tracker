@@ -72,7 +72,7 @@ func ExpenseSection(expenses []models.Expense, categories []models.Category, per
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-on=\"categoryUpdated: htmx.ajax('GET', '/expenses?year=' + this.dataset.year + '&month=' + this.dataset.month + '&filter=' + this.dataset.filter, '#expense-list')\"><div class=\"border-b border-gray-200 pb-4 mb-4 flex justify-between items-center\"><h2 class=\"text-lg font-semibold text-gray-900\">Expenses</h2><button hx-get=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-on::load=\"this.addEventListener('categoryUpdated', () => htmx.ajax('GET', '/expenses?year=' + this.dataset.year + '&month=' + this.dataset.month + '&filter=' + this.dataset.filter, '#expense-list'))\"><div class=\"border-b border-gray-200 pb-4 mb-4 flex justify-between items-center\"><h2 class=\"text-lg font-semibold text-gray-900\">Expenses</h2><button hx-get=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

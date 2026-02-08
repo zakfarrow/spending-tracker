@@ -124,7 +124,7 @@ templ CategoryNameEdit(cat models.Category) {
 				hx-include="this"
 				hx-vals={ `{"color":"` + cat.Color + `"}` }
 				hx-trigger="blur, keydown[key=='Enter']"
-				hx-on::after-swap="htmx.trigger('[data-year]', 'categoryUpdated')"
+				hx-on::after-swap="document.querySelector('[data-year]')?.dispatchEvent(new Event('categoryUpdated', {bubbles: true}))"
 				class="flex-1 px-2 py-1 text-sm border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 				onkeydown="if(event.key==='Escape'){event.preventDefault();htmx.ajax('GET','/categories','#category-list')}"
 			/>
@@ -139,7 +139,7 @@ templ CategoryColorEdit(cat models.Category) {
 			hx-put={ "/categories/" + strconv.FormatInt(cat.ID, 10) + "?inline=true" }
 			hx-target={ "#category-" + strconv.FormatInt(cat.ID, 10) }
 			hx-swap="outerHTML"
-			hx-on::after-swap="htmx.trigger('[data-year]', 'categoryUpdated')"
+			hx-on::after-swap="document.querySelector('[data-year]')?.dispatchEvent(new Event('categoryUpdated', {bubbles: true}))"
 			class="flex items-center gap-2 flex-1"
 		>
 			<input type="hidden" name="name" value={ cat.Name }/>

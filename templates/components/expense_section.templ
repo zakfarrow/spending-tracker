@@ -5,7 +5,7 @@ import "fmt"
 import "strconv"
 
 templ ExpenseSection(expenses []models.Expense, categories []models.Category, period models.Period, filter models.ExpenseFilter, summary models.Summary) {
-	<div class="bg-white rounded-xl shadow-sm p-6" data-year={ strconv.Itoa(period.Year) } data-month={ strconv.Itoa(period.Month) } data-filter={ string(filter) } hx-on="categoryUpdated: htmx.ajax('GET', '/expenses?year=' + this.dataset.year + '&month=' + this.dataset.month + '&filter=' + this.dataset.filter, '#expense-list')">
+	<div class="bg-white rounded-xl shadow-sm p-6" data-year={ strconv.Itoa(period.Year) } data-month={ strconv.Itoa(period.Month) } data-filter={ string(filter) } hx-on::load="this.addEventListener('categoryUpdated', () => htmx.ajax('GET', '/expenses?year=' + this.dataset.year + '&month=' + this.dataset.month + '&filter=' + this.dataset.filter, '#expense-list'))">
 		<div class="border-b border-gray-200 pb-4 mb-4 flex justify-between items-center">
 			<h2 class="text-lg font-semibold text-gray-900">Expenses</h2>
 			<button
