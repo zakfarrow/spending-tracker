@@ -47,6 +47,8 @@ func main() {
 	r.POST("/categories", h.CreateCategory)
 	r.PUT("/categories/:id", h.UpdateCategory)
 	r.DELETE("/categories/:id", h.DeleteCategory)
+	r.GET("/categories/:id/edit-name", h.EditCategoryName)
+	r.GET("/categories/:id/edit-color", h.EditCategoryColor)
 
 	// Modal routes
 	r.GET("/modals/expense", h.ExpenseModal)

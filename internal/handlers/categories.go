@@ -72,13 +72,25 @@ func (h *Handler) UpdateCategory(c *gin.Context) {
 		return
 	}
 
+	c.Header("Content-Type", "text/html; charset=utf-8")
+
+	// If inline=true, return just the updated category item
+	if c.Query("inline") == "true" {
+		cat, err := db.GetCategoryByID(c.Request.Context(), id)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error loading category: %v", err)
+			return
+		}
+		components.CategoryItem(*cat).Render(c.Request.Context(), c.Writer)
+		return
+	}
+
+	// Otherwise return the full list
 	categories, err := db.GetAllCategories(c.Request.Context())
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error loading categories: %v", err)
 		return
 	}
-
-	c.Header("Content-Type", "text/html; charset=utf-8")
 	components.CategoryList(categories).Render(c.Request.Context(), c.Writer)
 }
 
@@ -94,6 +106,20 @@ func (h *Handler) EditCategoryName(c *gin.Context) {
 
 	c.Header("Content-Type", "text/html; charset=utf-8")
 	components.CategoryNameEdit(*cat).Render(c.Request.Context(), c.Writer)
+}
+
+// EditCategoryColor returns the inline color picker for a category
+func (h *Handler) EditCategoryColor(c *gin.Context) {
+	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+
+	cat, err := db.GetCategoryByID(c.Request.Context(), id)
+	if err != nil {
+		c.String(http.StatusNotFound, "Category not found")
+		return
+	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	components.CategoryColorEdit(*cat).Render(c.Request.Context(), c.Writer)
 }
 
 // DeleteCategory deletes a category
