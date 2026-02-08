@@ -73,6 +73,8 @@ func (h *Handler) UpdateCategory(c *gin.Context) {
 	}
 
 	c.Header("Content-Type", "text/html; charset=utf-8")
+	// Trigger expense list refresh after category update
+	c.Header("HX-Trigger", "categoryUpdated")
 
 	// If inline=true, return just the updated category item
 	if c.Query("inline") == "true" {
